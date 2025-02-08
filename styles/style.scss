@@ -13,7 +13,7 @@ $clr-primary-a30: #b777e7;
 $clr-primary-a40: #c58eec;
 $clr-primary-a50: #d1a4f0;
 
-$clr-text: hsl(276, 57%, 86%);
+$clr-text: #dfc7f0;
 
 // ---- Fonts ----
 @font-face {
@@ -92,6 +92,7 @@ body {
   color: $clr-text;
   max-width: 300px;
   width: 100%;
+  font-family: 'sf'
 }
 
 // img
@@ -107,6 +108,28 @@ body {
   pointer-events: none;
   z-index: -1;
   animation: logo-appear 0.6s;
+}
+
+.img__arrow {
+  width: 28px;
+  transform: rotate(90deg);
+  transition: transform .2s;
+}
+
+// btn
+
+.btn_reset {
+  border: none;
+  cursor: pointer;
+}
+
+.btn__auth {
+  background-color: transparent;
+  padding: 5px;
+
+  &:hover .img__arrow {
+    transform: rotate(0deg);
+  }
 }
 
 // ---- Media ----
