@@ -35,7 +35,6 @@ const person2 = {
   currency: 'USD',
 };
 
-console.log(getInitials(person2.fullName));
 // ---- DOM Variables----
 
 // ---- Code ----
