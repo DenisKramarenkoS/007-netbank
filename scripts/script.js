@@ -2,14 +2,17 @@
 // ---- Functions ----
 
 function getInitials(fullName) {
-  return fullName.split(' ').map(word => word[0]?.toUpperCase()).join('');
+  return fullName
+    .split(' ')
+    .map((word) => word[0]?.toUpperCase())
+    .join('');
 }
 
 // ---- Variables ----
 
 const person = {
   fullName: 'Gustavo Dior',
-  initialBalance: 180000,
+  initialBalance: 180_000,
   interestRate: 4.5,
   movements: [900, -40, 5000],
   movementsDates: [
@@ -23,7 +26,7 @@ const person = {
 
 const person2 = {
   fullName: 'Aurora Sever',
-  initialBalance: 9909999.93,
+  initialBalance: 9_909_999.93,
   interestRate: 4.5,
   movements: [9000, 904, -5000],
   movementsDates: [
@@ -36,5 +39,4 @@ const person2 = {
 };
 
 // ---- DOM Variables----
-
 // ---- Code ----
