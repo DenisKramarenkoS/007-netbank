@@ -8,6 +8,29 @@ function getInitials(fullName) {
     .join('');
 }
 
+function getShortName(name) {
+  const splittedName = name.split(' ');
+  splittedName[splittedName.length - 1] = splittedName.at(-1)[0];
+  return splittedName.join(' ');
+}
+
+function toIntlCurrency(value, region, currency) {
+  return new Intl.NumberFormat(region, {
+    style: 'currency',
+    currency: currency,
+  }).format(value);
+}
+
+function toIntlDate(date, region) {
+  return new Intl.DateTimeFormat(region, {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(date);
+}
+
 // ---- Variables ----
 
 const persons = [
@@ -17,7 +40,8 @@ const persons = [
     initialBalance: 180_000,
     interestRate: 4.5,
     movements: [900, -40, 5000],
-    movementsDates: ['2019-01-25T14:18:46.235Z', '2023-02-08T07:25:23.114Z', '2024-10-05T12:29:53.131Z'],
+    movementsDates: [new Date('2019-01-25T14:18:46.235Z'), new Date('2023-02-08T07:25:23.114Z'), new Date('2024-10-05T12:29:53.131Z')],
+    movementsPerson: ['John Karnowel', 'Jane Cloude Damme', 'Laura Poe'],
     region: 'it',
     currency: 'EUR',
   },
@@ -27,7 +51,8 @@ const persons = [
     initialBalance: 9_909_999.93,
     interestRate: 4.5,
     movements: [9000, 904, -5000],
-    movementsDates: ['2024-09-24T14:18:46.330Z', '2024-10-12T07:45:23.294Z', '2025-01-04T04:20:53.194Z'],
+    movementsDates: [new Date('2024-09-24T14:18:46.330Z'), new Date('2024-10-12T07:45:23.294Z'), new Date('2025-01-04T04:20:53.194Z')],
+    movementsPerson: ['Genry Mozaro', 'Jovvani Jarsoni', 'Alexander McQueen'],
     region: 'en-US',
     currency: 'USD',
   },
@@ -36,11 +61,15 @@ const persons = [
 let isLogIn = Boolean(localStorage.getItem('isLogIn'));
 
 // ---- DOM Variables----
+
 const btnAuth = document.getElementById('-btn__auth');
 const btnLogOut = document.getElementById('-btn__log-out');
+const btnSort = document.getElementById('-btn__sort');
+
 const inputUsername = document.getElementById('-login__username');
 const inputPassword = document.getElementById('-login__password');
-const mainContent = document.getElementById('-main-content')
+const mainContent = document.getElementById('-main-content');
+const transferList = document.getElementById('-transfer__list');
 
 const inputNav = document.getElementsByClassName('nav__input');
 
@@ -48,6 +77,7 @@ const inputNav = document.getElementsByClassName('nav__input');
 
 if (isLogIn) {
   mainContent.classList.remove('hidden');
+  transferList.innerHTML = localStorage.getItem('transferList');
 }
 
 btnAuth.addEventListener('click', () => {
@@ -67,15 +97,72 @@ btnAuth.addEventListener('click', () => {
   }
 
   for (const person of persons) {
-    // console.log(getInitials(person.fullName) === input);
     if (getInitials(person.fullName) === inputUsername.value && person.password === Number(inputPassword.value)) {
       mainContent.classList.remove('hidden');
-      localStorage.setItem("isLogIn", "true")
+      localStorage.setItem('isLogIn', 'true');
+
+      // Implement Data
+      const personMovements = person.movements;
+      const personMovementsDates = person.movementsDates;
+
+      for (let i = 0; i < personMovements.length; i++) {
+        const transferWrap = document.createElement('a');
+        transferWrap.classList.add('transfer', 'link_reset');
+        transferWrap.href = '';
+
+        const transferValueWrap = document.createElement('div');
+        transferValueWrap.classList.add('transfer__value__wrap');
+
+        const transferCircle = document.createElement('div');
+        transferCircle.classList.add('transfer__circle');
+
+        const transferValue = document.createElement('div');
+        transferValue.classList.add('transfer__value');
+
+        const transferPerson = document.createElement('div');
+        transferPerson.classList.add('transfer__person');
+
+        const transferDateWrap = document.createElement('div');
+        transferDateWrap.classList.add('transfer__date');
+
+        const transferDate = document.createElement('div');
+
+        const transferDateHours = document.createElement('div');
+        transferDateHours.classList.add('transfer__date__hours');
+
+        const currentMovement = personMovements[i];
+        const currentMovementDate = toIntlDate(personMovementsDates[i], person.region).split(', ');
+        const currentMovementPerson = person.movementsPerson[i];
+
+        transferCircle.classList.add(currentMovement >= 0 ? 'transfer__in' : 'transfer__out');
+
+        transferValue.textContent = toIntlCurrency(currentMovement, person.region, person.currency);
+        transferPerson.textContent = getShortName(currentMovementPerson);
+        transferDate.textContent = currentMovementDate[0];
+        transferDateHours.textContent = currentMovementDate[1];
+
+        transferWrap.appendChild(transferValueWrap);
+        transferValueWrap.appendChild(transferCircle);
+        transferValueWrap.appendChild(transferValue);
+        transferWrap.appendChild(transferPerson);
+        transferWrap.appendChild(transferDateWrap);
+        transferDateWrap.appendChild(transferDate);
+        transferDateWrap.appendChild(transferDateHours);
+
+        transferList.appendChild(transferWrap);
+        localStorage.setItem('transferList', transferList.innerHTML);
+      }
     }
   }
 });
 
+btnSort.addEventListener('click', () => {
+  localStorage.setItem('obj', JSON.stringify(transferList));
+  console.log(JSON.parse(localStorage.getItem('obj')));
+});
+
 btnLogOut.addEventListener('click', () => {
   mainContent.classList.add('hidden');
-  localStorage.removeItem('isLogIn');
-})
+  transferList.innerHTML = '';
+  localStorage.clear();
+});

@@ -194,8 +194,22 @@ h2 {
 }
 
 .transfer__person {
-  flex-grow: 1;
   text-align: center;
+}
+
+.transfer__value__wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.transfer__date {
+  font-size: 1rem;
+}
+
+.transfer__date__hours {
+  font-size: 0.8rem;
+  text-align: right;
 }
 
 .transfer__actions {
@@ -272,6 +286,11 @@ h2 {
   color: #dfc7f0;
   width: 100%;
   font-family: "sf";
+}
+
+.link_reset {
+  color: #dfc7f0;
+  text-decoration: none;
 }
 
 .hidden {
