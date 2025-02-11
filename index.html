@@ -32,13 +32,13 @@ Internet Bank is a platform for exchanging any digital and paper currency. Pay 0
         <div class="nav__container nav__container__auth">
           <input id="-login__username" class="nav__input" type="text" placeholder="Username" required />
           <input id="-login__password" class="nav__input" type="text" placeholder="Password" required />
-          <button class="btn_reset btn__auth" type="button">
+          <button id="-btn__auth" class="btn_reset btn__auth" type="button">
             <img class="img__arrow" src="assets/images/arrow-right-line.svg" alt="" />
           </button>
         </div>
       </nav>
 
-      <main class="main">
+      <main id="-main-content" class="main hidden">
         <div class="info">
           <div class="info__name">Gustavo D.</div>
           <div class="info__value">7004.4$</div>
@@ -66,33 +66,33 @@ Internet Bank is a platform for exchanging any digital and paper currency. Pay 0
               <div>
                 <input class="input__search" type="text" placeholder="Search" />
               </div>
-              <button class="btn_reset btn__sort btn__default">Sort</button>
+              <button class="btn_reset btn__sort btn__default" type="button">Sort</button>
             </div>
           </section>
           <section class="actions">
             <div class="panel__section__mini actions__section actions__transfer">
               <h2>Transfer</h2>
               <div class="actions__wrap">
-                <input class="input__transfer" type="text" name="" id="" placeholder="How much" />
-                <input class="input__transfer" type="text" name="" id="" placeholder="Whom" />
+                <input class="input__transfer" type="text" placeholder="How much" />
+                <input class="input__transfer" type="text" placeholder="Whom" />
               </div>
             </div>
             <div class="panel__section__mini actions__section actions__loan">
               <h2>Borrow</h2>
               <div class="actions__wrap">
-                <input class="input__transfer" type="text" name="" id="" placeholder="How much" />
+                <input class="input__transfer" type="text" placeholder="How much" />
               </div>
             </div>
             <div class="panel__section__mini actions__section actions__deposit">
               <h2>Invest</h2>
               <div class="actions__wrap">
-                <input class="input__transfer" type="text" name="" id="" placeholder="How much" />
+                <input class="input__transfer" type="text" placeholder="How much" />
               </div>
             </div>
           </section>
         </div>
         <div class="extra">
-          <button class="btn__default btn_reset btn__log-out">Log Out</button>
+          <button id="-btn__log-out" class="btn__default btn_reset" type="button">Log Out</button>
         </div>
       </main>
     </div>

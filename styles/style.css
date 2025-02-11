@@ -73,6 +73,10 @@ h2 {
   font-family: "sf";
 }
 
+.nav__input_ani-color {
+  animation: not-valid 2s;
+}
+
 .info {
   display: flex;
   justify-content: center;
@@ -110,18 +114,6 @@ h2 {
   cursor: pointer;
 }
 
-.btn__sort {
-  transition: padding 0.2s, font-size 0.2s, background-color 0.3s, transform 0.2s;
-}
-.btn__sort:active {
-  font-size: 1.2rem;
-  background-color: #9b47de;
-  transform: scale(0.95);
-}
-.btn__sort:hover {
-  padding-block: 7px;
-}
-
 .btn__auth {
   background-color: transparent;
   padding: 5px;
@@ -137,12 +129,9 @@ h2 {
   color: #dfc7f0;
   border-radius: 25px;
   font-size: 1.2rem;
-}
-
-.btn__log-out {
   transition: background-color 0.2s;
 }
-.btn__log-out:hover {
+.btn__default:hover {
   background-color: rgb(255, 0, 85);
 }
 
@@ -298,5 +287,10 @@ h2 {
   0% {
     opacity: 10%;
     transform: translate(-50%, -50%) translateY(20px);
+  }
+}
+@keyframes not-valid {
+  50% {
+    border-color: red;
   }
 }/*# sourceMappingURL=style.css.map */
