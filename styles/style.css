@@ -77,10 +77,8 @@ h2 {
   display: flex;
   justify-content: center;
   gap: 10px;
-  width: -moz-fit-content;
-  width: fit-content;
-  margin-inline: auto;
-  font-size: 1.2rem;
+  width: 100%;
+  font-size: 1.1rem;
 }
 
 .img__logo {
@@ -113,12 +111,6 @@ h2 {
 }
 
 .btn__sort {
-  background-color: #8b2bd9;
-  font-size: 1.3rem;
-  padding-inline: 25px;
-  border-radius: 25px;
-  color: #dfc7f0;
-  padding-block: 3px;
   transition: padding 0.2s, font-size 0.2s, background-color 0.3s, transform 0.2s;
 }
 .btn__sort:active {
@@ -138,8 +130,30 @@ h2 {
   transform: rotate(0deg);
 }
 
+.btn__default {
+  padding-inline: 20px;
+  padding-block: 3px;
+  background-color: #8b2bd9;
+  color: #dfc7f0;
+  border-radius: 25px;
+  font-size: 1.2rem;
+}
+
+.btn__log-out {
+  transition: background-color 0.2s;
+}
+.btn__log-out:hover {
+  background-color: rgb(255, 0, 85);
+}
+
 .main {
   margin-top: 40px;
+}
+
+.extra {
+  display: flex;
+  justify-content: right;
+  margin-top: 10px;
 }
 
 .panel {
@@ -227,12 +241,37 @@ h2 {
   border: 2px solid #d1a4f0;
   flex-grow: 1;
   transition: flex-grow 0.2s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
 }
 .actions__section:hover {
   flex-grow: 1.2;
 }
 
+.actions__wrap {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  margin-inline: auto;
+  gap: 5px;
+}
+
 .input__search {
+  border-radius: 25px;
+  font-size: 1.2rem;
+  background-color: transparent;
+  -webkit-backdrop-filter: blur(25px);
+          backdrop-filter: blur(25px);
+  border: 2px solid #d1a4f0;
+  padding-left: 15px;
+  padding-block: 5px;
+  color: #dfc7f0;
+  width: 100%;
+  font-family: "sf";
+}
+
+.input__transfer {
   border-radius: 25px;
   font-size: 1.2rem;
   background-color: transparent;
