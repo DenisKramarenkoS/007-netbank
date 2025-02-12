@@ -96,64 +96,64 @@ btnAuth.addEventListener('click', () => {
     return;
   }
 
-  for (const person of persons) {
-    if (getInitials(person.fullName) === inputUsername.value && person.password === Number(inputPassword.value)) {
-      mainContent.classList.remove('hidden');
-      localStorage.setItem('isLogIn', 'true');
-
-      // Implement Data
-      const personMovements = person.movements;
-      const personMovementsDates = person.movementsDates;
-
-      for (let i = 0; i < personMovements.length; i++) {
-        const transferWrap = document.createElement('a');
-        transferWrap.classList.add('transfer', 'link_reset');
-        transferWrap.href = '';
-
-        const transferValueWrap = document.createElement('div');
-        transferValueWrap.classList.add('transfer__value__wrap');
-
-        const transferCircle = document.createElement('div');
-        transferCircle.classList.add('transfer__circle');
-
-        const transferValue = document.createElement('div');
-        transferValue.classList.add('transfer__value');
-
-        const transferPerson = document.createElement('div');
-        transferPerson.classList.add('transfer__person');
-
-        const transferDateWrap = document.createElement('div');
-        transferDateWrap.classList.add('transfer__date');
-
-        const transferDate = document.createElement('div');
-
-        const transferDateHours = document.createElement('div');
-        transferDateHours.classList.add('transfer__date__hours');
-
-        const currentMovement = personMovements[i];
-        const currentMovementDate = toIntlDate(personMovementsDates[i], person.region).split(', ');
-        const currentMovementPerson = person.movementsPerson[i];
-
-        transferCircle.classList.add(currentMovement >= 0 ? 'transfer__in' : 'transfer__out');
-
-        transferValue.textContent = toIntlCurrency(currentMovement, person.region, person.currency);
-        transferPerson.textContent = getShortName(currentMovementPerson);
-        transferDate.textContent = currentMovementDate[0];
-        transferDateHours.textContent = currentMovementDate[1];
-
-        transferWrap.appendChild(transferValueWrap);
-        transferValueWrap.appendChild(transferCircle);
-        transferValueWrap.appendChild(transferValue);
-        transferWrap.appendChild(transferPerson);
-        transferWrap.appendChild(transferDateWrap);
-        transferDateWrap.appendChild(transferDate);
-        transferDateWrap.appendChild(transferDateHours);
-
-        transferList.appendChild(transferWrap);
-        localStorage.setItem('transferList', transferList.innerHTML);
-      }
-    }
+  const person = persons.find((element) => getInitials(element.fullName) === inputUsername.value && element.password === Number(inputPassword.value));
+  console.log(person);
+  if (!person) {
+    return;
   }
+
+  // Implement Data
+  const personMovements = person.movements;
+  const personMovementsDates = person.movementsDates;
+
+  for (let i = 0; i < personMovements.length; i++) {
+    const transferWrap = document.createElement('a');
+    transferWrap.classList.add('transfer', 'link_reset');
+    transferWrap.href = '';
+
+    const transferValueWrap = document.createElement('div');
+    transferValueWrap.classList.add('transfer__value__wrap');
+
+    const transferCircle = document.createElement('div');
+    transferCircle.classList.add('transfer__circle');
+
+    const transferValue = document.createElement('div');
+    transferValue.classList.add('transfer__value');
+
+    const transferPerson = document.createElement('div');
+    transferPerson.classList.add('transfer__person');
+
+    const transferDateWrap = document.createElement('div');
+    transferDateWrap.classList.add('transfer__date');
+
+    const transferDate = document.createElement('div');
+
+    const transferDateHours = document.createElement('div');
+    transferDateHours.classList.add('transfer__date__hours');
+
+    const currentMovement = personMovements[i];
+    const currentMovementDate = toIntlDate(personMovementsDates[i], person.region).split(', ');
+    const currentMovementPerson = person.movementsPerson[i];
+
+    transferCircle.classList.add(currentMovement >= 0 ? 'transfer__in' : 'transfer__out');
+
+    transferValue.textContent = toIntlCurrency(currentMovement, person.region, person.currency);
+    transferPerson.textContent = getShortName(currentMovementPerson);
+    transferDate.textContent = currentMovementDate[0];
+    transferDateHours.textContent = currentMovementDate[1];
+
+    transferWrap.appendChild(transferValueWrap);
+    transferValueWrap.appendChild(transferCircle);
+    transferValueWrap.appendChild(transferValue);
+    transferWrap.appendChild(transferPerson);
+    transferWrap.appendChild(transferDateWrap);
+    transferDateWrap.appendChild(transferDate);
+    transferDateWrap.appendChild(transferDateHours);
+
+    transferList.appendChild(transferWrap);
+    localStorage.setItem('transferList', transferList.innerHTML);
+  }
+  mainContent.classList.remove('hidden');
 });
 
 btnSort.addEventListener('click', () => {
