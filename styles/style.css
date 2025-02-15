@@ -10,6 +10,10 @@
   font-weight: bold;
   font-style: normal;
 }
+:root {
+  color-scheme: dark;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -36,11 +40,22 @@ h2 {
 }
 
 .nav {
+  position: absolute;
+  max-width: 1020px;
   width: 100%;
   display: flex;
   justify-content: space-between;
   margin-top: 10px;
   gap: 10px;
+  padding-inline: 10px;
+}
+
+.nav_ani {
+  animation: nav_ani 0.6s forwards;
+}
+
+.nav_ani_reverse {
+  animation: nav_ani 0.6s forwards reverse;
 }
 
 .nav__container {
@@ -74,7 +89,7 @@ h2 {
 }
 
 .nav__input_ani-color {
-  animation: not-valid 2s;
+  animation: not_valid 2s;
 }
 
 .info {
@@ -95,7 +110,7 @@ h2 {
   filter: invert(0%) sepia(4%) saturate(10%) hue-rotate(352deg) brightness(25%) contrast(86%);
   pointer-events: none;
   z-index: -1;
-  animation: logo-appear 0.6s;
+  animation: logo_appear 0.6s;
 }
 
 .img__arrow {
@@ -137,6 +152,14 @@ h2 {
 
 .main {
   margin-top: 40px;
+}
+
+.main_ani {
+  animation: main_ani 0.6s forwards;
+}
+
+.main_ani_reverse {
+  animation: main_ani 0.6s forwards reverse;
 }
 
 .extra {
@@ -302,14 +325,30 @@ h2 {
     flex-direction: column;
   }
 }
-@keyframes logo-appear {
+@keyframes logo_appear {
   0% {
     opacity: 10%;
     transform: translate(-50%, -50%) translateY(20px);
   }
 }
-@keyframes not-valid {
+@keyframes not_valid {
   50% {
     border-color: red;
+  }
+}
+@keyframes nav_ani {
+  from {
+    top: -70px;
+  }
+  to {
+    top: 0px;
+  }
+}
+@keyframes main_ani {
+  from {
+    transform: translateY(800px);
+  }
+  to {
+    transform: translateY(0);
   }
 }/*# sourceMappingURL=style.css.map */
