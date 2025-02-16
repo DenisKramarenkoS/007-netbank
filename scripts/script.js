@@ -72,7 +72,7 @@ const persons = [
   },
 ];
 
-let isLogIn = Boolean(localStorage.getItem('isLogIn'));
+let localTransferList = localStorage.getItem('transferList');
 
 // ---- DOM Variables----
 
@@ -90,8 +90,9 @@ const inputNav = document.getElementsByClassName('nav__input');
 
 // ---- Code ----
 
-if (isLogIn) {
+if (Boolean(localTransferList)) {
   mainContent.classList.remove('hidden');
+  nav.classList.add('hidden');
   transferList.innerHTML = localStorage.getItem('transferList');
 }
 
@@ -173,25 +174,31 @@ btnAuth.addEventListener('click', () => {
     localStorage.setItem('transferList', transferList.innerHTML);
   }
   manageAnimation(nav, 'nav_ani', 'nav_ani_reverse');
-  nav.addEventListener('animationend', () => {
-    nav.classList.add('hidden');
-  }, {once: true});
+  nav.addEventListener(
+    'animationend',
+    () => {
+      nav.classList.add('hidden');
+    },
+    { once: true }
+  );
   mainContent.classList.remove('hidden');
   manageAnimation(mainContent, 'main_ani_reverse', 'main_ani');
 });
 
 btnSort.addEventListener('click', () => {
-  localStorage.setItem('obj', JSON.stringify(transferList));
-  console.log(JSON.parse(localStorage.getItem('obj')));
 });
 
 btnLogOut.addEventListener('click', () => {
   manageAnimation(mainContent, 'main_ani', 'main_ani_reverse');
-  mainContent.addEventListener('animationend', () => {
-    mainContent.classList.add('hidden');
-    transferList.innerHTML = '';
-    localStorage.clear();
-  }, {once: true});
+  mainContent.addEventListener(
+    'animationend',
+    () => {
+      mainContent.classList.add('hidden');
+      transferList.innerHTML = '';
+      localStorage.clear();
+    },
+    { once: true }
+  );
   nav.classList.remove('hidden');
   manageAnimation(nav, 'nav_ani_reverse', 'nav_ani');
 });

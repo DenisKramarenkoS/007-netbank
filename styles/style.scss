@@ -48,6 +48,7 @@ body {
   color: $clr-text;
   font-family: 'sf';
   overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 h2 {
@@ -76,11 +77,11 @@ h2 {
 }
 
 .nav_ani {
-  animation: nav_ani 0.6s forwards;
+  animation: nav_ani 0.8s forwards ease-in-out;
 }
 
 .nav_ani_reverse {
-  animation: nav_ani 0.6s forwards reverse;
+  animation: nav_ani 0.6s forwards reverse ease-in-out;
 }
 
 .nav__container {
@@ -186,11 +187,11 @@ h2 {
 }
 
 .main_ani {
-  animation: main_ani 0.6s forwards;
+  animation: main_ani 1s forwards ease-in-out;
 }
 
 .main_ani_reverse {
-  animation: main_ani 0.6s forwards reverse;
+  animation: main_ani 1s forwards reverse ease-in-out;
 }
 
 // extra
@@ -395,7 +396,7 @@ h2 {
 
 @keyframes main_ani {
   from {
-    transform: translateY(800px);
+    transform: translateY(1000px);
   }
   to {
     transform: translateY(0);
