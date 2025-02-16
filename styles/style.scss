@@ -14,6 +14,7 @@ $clr-primary-a40: #c58eec;
 $clr-primary-a50: #d1a4f0;
 
 $clr-text: #dfc7f0;
+$clr-rose: rgb(255, 0, 85);
 
 // ---- Fonts ----
 @font-face {
@@ -177,7 +178,20 @@ h2 {
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: rgb(255, 0, 85);
+    background-color: $clr-rose;
+  }
+}
+
+.btn__action {
+  width: 50%;
+  margin-inline: auto;
+  background-color: transparent;
+  border: 2px solid $clr-primary-a50;
+  transition: color 0.3s, background-color 0.3s;
+
+  &:hover {
+    background-color: $clr-primary-a50;
+    color: black;
   }
 }
 

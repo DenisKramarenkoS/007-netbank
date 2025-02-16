@@ -52,8 +52,8 @@ Internet Bank is a platform for exchanging any digital and paper currency. Pay 0
 
       <main id="-main-content" class="main main_ani hidden">
         <div class="info">
-          <div class="info__name">Gustavo D.</div>
-          <div class="info__value">7004.4$</div>
+          <div id="-info__name" class="info__name"></div>
+          <div id="-info__value" class="info__value"></div>
         </div>
         <div class="panel">
           <section class="transfer__container">
@@ -74,21 +74,39 @@ Internet Bank is a platform for exchanging any digital and paper currency. Pay 0
             <div class="panel__section__mini actions__section actions__transfer">
               <h2>Transfer</h2>
               <div class="actions__wrap">
-                <input class="input__transfer" type="text" placeholder="How much" />
-                <input class="input__transfer" type="text" placeholder="Whom" />
-                <button class="btn__default btn_reset" type="button">send</button>
+                <input
+                  id="-transfer__value"
+                  class="input__transfer"
+                  type="text"
+                  placeholder="How much"
+                />
+                <input
+                  id="-transfer__whom"
+                  class="input__transfer"
+                  type="text"
+                  placeholder="Whom"
+                />
+                <button
+                  id="-btn__transfer"
+                  class="btn__default btn_reset btn__action"
+                  type="button"
+                >
+                  send
+                </button>
               </div>
             </div>
             <div class="panel__section__mini actions__section actions__loan">
               <h2>Borrow</h2>
               <div class="actions__wrap">
                 <input class="input__transfer" type="text" placeholder="How much" />
+                <button class="btn__default btn_reset btn__action" type="button">Confirm</button>
               </div>
             </div>
             <div class="panel__section__mini actions__section actions__deposit">
               <h2>Invest</h2>
               <div class="actions__wrap">
                 <input class="input__transfer" type="text" placeholder="How much" />
+                <button class="btn__default btn_reset btn__action" type="button">Confirm</button>
               </div>
             </div>
           </section>

@@ -74,11 +74,14 @@ const persons = [
 
 let localTransferList = localStorage.getItem('transferList');
 
+let personIndex = -1;
+
 // ---- DOM Variables----
 
 const btnAuth = document.getElementById('-btn__auth');
 const btnLogOut = document.getElementById('-btn__log-out');
 const btnSort = document.getElementById('-btn__sort');
+const btnTransfer = document.getElementById('-btn__transfer');
 
 const inputUsername = document.getElementById('-login__username');
 const inputPassword = document.getElementById('-login__password');
@@ -87,13 +90,27 @@ const nav = document.getElementById('-nav');
 const transferList = document.getElementById('-transfer__list');
 
 const inputNav = document.getElementsByClassName('nav__input');
+const inputTransferValue = document.getElementById('-transfer__value');
+const inputTransferWhom = document.getElementById('-transfer__whom');
+
+const infoName = document.getElementById('-info__name');
+const infoValue = document.getElementById('-info__value');
 
 // ---- Code ----
 
 if (Boolean(localTransferList)) {
   mainContent.classList.remove('hidden');
   nav.classList.add('hidden');
+
+  personIndex = localStorage.getItem('personIndex');
+  const localPerson = persons[personIndex];
   transferList.innerHTML = localStorage.getItem('transferList');
+  infoName.textContent = localPerson.fullName + '.';
+  infoValue.textContent = toIntlCurrency(
+    localPerson.initialBalance,
+    localPerson.region,
+    localPerson.currency
+  );
 }
 
 btnAuth.addEventListener('click', () => {
@@ -112,15 +129,17 @@ btnAuth.addEventListener('click', () => {
     return;
   }
 
-  const person = persons.find(
+  personIndex = persons.findIndex(
     (element) =>
       getInitials(element.fullName) === inputUsername.value &&
       element.password === Number(inputPassword.value)
   );
-  console.log(person);
-  if (!person) {
+
+  if (personIndex === -1) {
     return;
   }
+
+  const person = persons[personIndex];
 
   // Implement Data
   const personMovements = person.movements;
@@ -171,8 +190,13 @@ btnAuth.addEventListener('click', () => {
     transferDateWrap.appendChild(transferDateHours);
 
     transferList.appendChild(transferWrap);
-    localStorage.setItem('transferList', transferList.innerHTML);
   }
+  localStorage.setItem('transferList', transferList.innerHTML);
+
+  infoName.textContent = getShortName(person.fullName) + '.';
+  infoValue.textContent = toIntlCurrency(person.initialBalance, person.region, person.currency);
+  localStorage.setItem('personIndex', personIndex);
+
   manageAnimation(nav, 'nav_ani', 'nav_ani_reverse');
   nav.addEventListener(
     'animationend',
@@ -185,7 +209,11 @@ btnAuth.addEventListener('click', () => {
   manageAnimation(mainContent, 'main_ani_reverse', 'main_ani');
 });
 
-btnSort.addEventListener('click', () => {
+btnTransfer.addEventListener('click', () => {
+  const localPerson = persons[personIndex];
+
+  localPerson.movements.push(inputTransferValue.value)
+  localPerson.movementsPerson.push(inputTransferWhom.value)
 });
 
 btnLogOut.addEventListener('click', () => {

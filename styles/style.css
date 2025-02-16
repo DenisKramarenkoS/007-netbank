@@ -151,6 +151,18 @@ h2 {
   background-color: rgb(255, 0, 85);
 }
 
+.btn__action {
+  width: 50%;
+  margin-inline: auto;
+  background-color: transparent;
+  border: 2px solid #d1a4f0;
+  transition: color 0.3s, background-color 0.3s;
+}
+.btn__action:hover {
+  background-color: #d1a4f0;
+  color: black;
+}
+
 .main {
   margin-top: 40px;
 }
