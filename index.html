@@ -27,31 +27,47 @@ Internet Bank is a platform for exchanging any digital and paper currency. Pay 0
   <body>
     <div class="wrap">
       <img class="img__logo" src="assets/images/netbank-icon-opti.svg" alt="" />
-      <nav class="nav">
+      <nav class="nav nav_ani" id="-nav">
         <div class="nav__container nav__container__text">Log in to your account</div>
         <div class="nav__container nav__container__auth">
-          <input id="-login__username" class="nav__input" type="text" placeholder="Username" required />
-          <input id="-login__password" class="nav__input" type="text" placeholder="Password" required />
+          <input
+            id="-login__username"
+            class="nav__input"
+            type="text"
+            placeholder="Username"
+            required
+          />
+          <input
+            id="-login__password"
+            class="nav__input"
+            type="text"
+            placeholder="Password"
+            required
+          />
           <button id="-btn__auth" class="btn_reset btn__auth" type="button">
             <img class="img__arrow" src="assets/images/arrow-right-line.svg" alt="" />
           </button>
         </div>
       </nav>
 
-      <main id="-main-content" class="main hidden">
+      <main id="-main-content" class="main main_ani hidden">
         <div class="info">
           <div class="info__name">Gustavo D.</div>
           <div class="info__value">7004.4$</div>
         </div>
         <div class="panel">
           <section class="transfer__container">
-            <div id="-transfer__list"class="panel__section__mini transfer__section transfer__base">
-            </div>
+            <div
+              id="-transfer__list"
+              class="panel__section__mini transfer__section transfer__base"
+            ></div>
             <div class="panel__section__mini transfer__section transfer__actions">
               <div>
                 <input class="input__search" type="text" placeholder="Search" />
               </div>
-              <button id="-btn__sort" class="btn_reset btn__sort btn__default" type="button">Sort</button>
+              <button id="-btn__sort" class="btn_reset btn__sort btn__default" type="button">
+                Sort
+              </button>
             </div>
           </section>
           <section class="actions">
@@ -60,6 +76,7 @@ Internet Bank is a platform for exchanging any digital and paper currency. Pay 0
               <div class="actions__wrap">
                 <input class="input__transfer" type="text" placeholder="How much" />
                 <input class="input__transfer" type="text" placeholder="Whom" />
+                <button class="btn__default btn_reset" type="button">send</button>
               </div>
             </div>
             <div class="panel__section__mini actions__section actions__loan">
@@ -83,7 +100,7 @@ Internet Bank is a platform for exchanging any digital and paper currency. Pay 0
     </div>
   </body>
 </html>
-              <!-- <a class="transfer link_reset" href="">
+<!-- <a class="transfer link_reset" href="">
                 <div class="transfer__value__wrap">
                   <div class="transfer__out transfer__circle"></div>
                   <div class="transfer__value">-11$</div>

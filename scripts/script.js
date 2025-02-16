@@ -31,6 +31,12 @@ function toIntlDate(date, region) {
   }).format(date);
 }
 
+function manageAnimation(element, oldAnimationClass, newAnimationClass) {
+  element.classList.remove(oldAnimationClass);
+  void element.offsetWidth;
+  element.classList.add(newAnimationClass);
+}
+
 // ---- Variables ----
 
 const persons = [
@@ -40,7 +46,11 @@ const persons = [
     initialBalance: 180_000,
     interestRate: 4.5,
     movements: [900, -40, 5000],
-    movementsDates: [new Date('2019-01-25T14:18:46.235Z'), new Date('2023-02-08T07:25:23.114Z'), new Date('2024-10-05T12:29:53.131Z')],
+    movementsDates: [
+      new Date('2019-01-25T14:18:46.235Z'),
+      new Date('2023-02-08T07:25:23.114Z'),
+      new Date('2024-10-05T12:29:53.131Z'),
+    ],
     movementsPerson: ['John Karnowel', 'Jane Cloude Damme', 'Laura Poe'],
     region: 'it',
     currency: 'EUR',
@@ -51,14 +61,18 @@ const persons = [
     initialBalance: 9_909_999.93,
     interestRate: 4.5,
     movements: [9000, 904, -5000],
-    movementsDates: [new Date('2024-09-24T14:18:46.330Z'), new Date('2024-10-12T07:45:23.294Z'), new Date('2025-01-04T04:20:53.194Z')],
+    movementsDates: [
+      new Date('2024-09-24T14:18:46.330Z'),
+      new Date('2024-10-12T07:45:23.294Z'),
+      new Date('2025-01-04T04:20:53.194Z'),
+    ],
     movementsPerson: ['Genry Mozaro', 'Jovvani Jarsoni', 'Alexander McQueen'],
     region: 'en-US',
     currency: 'USD',
   },
 ];
 
-let isLogIn = Boolean(localStorage.getItem('isLogIn'));
+let localTransferList = localStorage.getItem('transferList');
 
 // ---- DOM Variables----
 
@@ -69,14 +83,16 @@ const btnSort = document.getElementById('-btn__sort');
 const inputUsername = document.getElementById('-login__username');
 const inputPassword = document.getElementById('-login__password');
 const mainContent = document.getElementById('-main-content');
+const nav = document.getElementById('-nav');
 const transferList = document.getElementById('-transfer__list');
 
 const inputNav = document.getElementsByClassName('nav__input');
 
 // ---- Code ----
 
-if (isLogIn) {
+if (Boolean(localTransferList)) {
   mainContent.classList.remove('hidden');
+  nav.classList.add('hidden');
   transferList.innerHTML = localStorage.getItem('transferList');
 }
 
@@ -96,7 +112,11 @@ btnAuth.addEventListener('click', () => {
     return;
   }
 
-  const person = persons.find((element) => getInitials(element.fullName) === inputUsername.value && element.password === Number(inputPassword.value));
+  const person = persons.find(
+    (element) =>
+      getInitials(element.fullName) === inputUsername.value &&
+      element.password === Number(inputPassword.value)
+  );
   console.log(person);
   if (!person) {
     return;
@@ -153,16 +173,32 @@ btnAuth.addEventListener('click', () => {
     transferList.appendChild(transferWrap);
     localStorage.setItem('transferList', transferList.innerHTML);
   }
+  manageAnimation(nav, 'nav_ani', 'nav_ani_reverse');
+  nav.addEventListener(
+    'animationend',
+    () => {
+      nav.classList.add('hidden');
+    },
+    { once: true }
+  );
   mainContent.classList.remove('hidden');
+  manageAnimation(mainContent, 'main_ani_reverse', 'main_ani');
 });
 
 btnSort.addEventListener('click', () => {
-  localStorage.setItem('obj', JSON.stringify(transferList));
-  console.log(JSON.parse(localStorage.getItem('obj')));
 });
 
 btnLogOut.addEventListener('click', () => {
-  mainContent.classList.add('hidden');
-  transferList.innerHTML = '';
-  localStorage.clear();
+  manageAnimation(mainContent, 'main_ani', 'main_ani_reverse');
+  mainContent.addEventListener(
+    'animationend',
+    () => {
+      mainContent.classList.add('hidden');
+      transferList.innerHTML = '';
+      localStorage.clear();
+    },
+    { once: true }
+  );
+  nav.classList.remove('hidden');
+  manageAnimation(nav, 'nav_ani_reverse', 'nav_ani');
 });
