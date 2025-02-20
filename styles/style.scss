@@ -235,6 +235,7 @@ h2 {
   display: grid;
   grid-template-rows: 6fr 1fr;
   row-gap: 10px;
+  height: 700px;
 }
 
 .transfer__section {
@@ -242,12 +243,11 @@ h2 {
 }
 
 .transfer__base {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
   padding-top: 20px;
   padding-inline: 15px;
   font-size: 20px;
+  overflow-y: auto;
+  height: 100%;
 }
 
 .transfer__circle {
@@ -299,6 +299,7 @@ h2 {
   align-items: center;
   padding-inline: 20px;
   transition: height 0.2s;
+  margin-bottom: 10px;
 
   &:hover {
     height: 70px;
