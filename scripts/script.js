@@ -111,44 +111,36 @@ function Person(
 }
 
 const persons = [
-  {
-    fullName: 'Gustavo Dior',
-    password: 1111,
-    initialBalance: 180_000,
-    interestRate: 4.5,
-    movements: [900, -40, 5000],
-    movementsDates: [
+  new Person(
+    'Gustavo Dior',
+    1111,
+    180_000,
+    4.5,
+    [900, -40, 5000],
+    [
       new Date('2019-01-25T14:18:46.235Z'),
       new Date('2023-02-08T07:25:23.114Z'),
       new Date('2024-10-05T12:29:53.131Z'),
     ],
-    movementsPerson: ['John Karnowel', 'Jane Cloude Damme', 'Laura Poe'],
-    region: 'it',
-    currency: 'EUR',
-
-    getCurrentBalance() {
-      return this.initialBalance + this.movements.reduce((acc, item) => acc + item, 0);
-    },
-  },
-  {
-    fullName: 'Aurora Sever',
-    password: 2222,
-    initialBalance: 9_909_999.93,
-    interestRate: 4.5,
-    movements: [9000, 904, -5000],
-    movementsDates: [
+    ['John Karnowel', 'Jane Cloude Damme', 'Laura Poe'],
+    'it',
+    'EUR'
+  ),
+  new Person(
+    'Aurora Sever',
+    2222,
+    9_909_999.93,
+    4.5,
+    [9000, 904, -5000],
+    [
       new Date('2024-09-24T14:18:46.330Z'),
       new Date('2024-10-12T07:45:23.294Z'),
       new Date('2025-01-04T04:20:53.194Z'),
     ],
-    movementsPerson: ['Genry Mozaro', 'Jovvani Jarsoni', 'Alexander McQueen'],
-    region: 'en-US',
-    currency: 'USD',
-
-    getCurrentBalance() {
-      return this.initialBalance + this.movements.reduce((acc, item) => acc + item, 0);
-    },
-  },
+    ['Genry Mozaro', 'Jovvani Jarsoni', 'Alexander McQueen'],
+    'en-US',
+    'USD'
+  ),
 ];
 
 let localTransferList = localStorage.getItem('transferList');
@@ -186,7 +178,7 @@ if (Boolean(localTransferList)) {
   transferList.innerHTML = localStorage.getItem('transferList');
   infoName.textContent = localPerson.fullName + '.';
   infoValue.textContent = toIntlCurrency(
-    localPerson.initialBalance,
+    localPerson.getCurrentBalance(),
     localPerson.region,
     localPerson.currency
   );
@@ -265,6 +257,13 @@ btnTransfer.addEventListener('click', () => {
     localPerson.movements.at(-1),
     localPerson.movementsDates.at(-1),
     localPerson.movementsPerson.at(-1),
+    localPerson.region,
+    localPerson.currency
+  );
+
+  // Refresh Balance
+  infoValue.textContent = toIntlCurrency(
+    localPerson.getCurrentBalance(),
     localPerson.region,
     localPerson.currency
   );
