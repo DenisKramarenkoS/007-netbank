@@ -37,7 +37,7 @@ function manageAnimation(element, oldAnimationClass, newAnimationClass) {
   element.classList.add(newAnimationClass);
 }
 
-function createTransfer(personMovements, personMovementsDates, ) {
+function addTransfer(movement, movementDate, movementPerson, region, currency) {
   const transferWrap = document.createElement('a');
   transferWrap.classList.add('transfer', 'link_reset');
   transferWrap.href = '';
@@ -62,16 +62,14 @@ function createTransfer(personMovements, personMovementsDates, ) {
   const transferDateHours = document.createElement('div');
   transferDateHours.classList.add('transfer__date__hours');
 
-  const currentMovement = personMovements[i];
-  const currentMovementDate = toIntlDate(personMovementsDates[i], person.region).split(', ');
-  const currentMovementPerson = person.movementsPerson[i];
+  const intlMovementDate = toIntlDate(movementDate, region).split(', ');
 
-  transferCircle.classList.add(currentMovement >= 0 ? 'transfer__in' : 'transfer__out');
+  transferCircle.classList.add(movement >= 0 ? 'transfer__in' : 'transfer__out');
 
-  transferValue.textContent = toIntlCurrency(currentMovement, person.region, person.currency);
-  transferPerson.textContent = getShortName(currentMovementPerson);
-  transferDate.textContent = currentMovementDate[0];
-  transferDateHours.textContent = currentMovementDate[1];
+  transferValue.textContent = toIntlCurrency(movement, region, currency);
+  transferPerson.textContent = getShortName(movementPerson);
+  transferDate.textContent = intlMovementDate[0];
+  transferDateHours.textContent = intlMovementDate[1];
 
   transferWrap.appendChild(transferValueWrap);
   transferValueWrap.appendChild(transferCircle);
@@ -85,6 +83,32 @@ function createTransfer(personMovements, personMovementsDates, ) {
 }
 
 // ---- Variables ----
+
+function Person(
+  fullName,
+  password,
+  initialBalance,
+  interestRate,
+  movements,
+  movementsDates,
+  movementsPerson,
+  region,
+  currency
+) {
+  this.fullName = fullName;
+  this.password = password;
+  this.initialBalance = initialBalance;
+  this.interestRate = interestRate;
+  this.movements = movements;
+  this.movementsDates = movementsDates;
+  this.movementsPerson = movementsPerson;
+  this.region = region;
+  this.currency = currency;
+
+  this.getCurrentBalance = function () {
+    return this.initialBalance + this.movements.reduce((acc, item) => acc + item, 0);
+  };
+}
 
 const persons = [
   {
@@ -101,6 +125,10 @@ const persons = [
     movementsPerson: ['John Karnowel', 'Jane Cloude Damme', 'Laura Poe'],
     region: 'it',
     currency: 'EUR',
+
+    getCurrentBalance() {
+      return this.initialBalance + this.movements.reduce((acc, item) => acc + item, 0);
+    },
   },
   {
     fullName: 'Aurora Sever',
@@ -116,6 +144,10 @@ const persons = [
     movementsPerson: ['Genry Mozaro', 'Jovvani Jarsoni', 'Alexander McQueen'],
     region: 'en-US',
     currency: 'USD',
+
+    getCurrentBalance() {
+      return this.initialBalance + this.movements.reduce((acc, item) => acc + item, 0);
+    },
   },
 ];
 
@@ -175,7 +207,7 @@ btnAuth.addEventListener('click', () => {
     }
     return;
   }
-
+  // Find Person Index in order to get access to person
   personIndex = persons.findIndex(
     (element) =>
       getInitials(element.fullName) === inputUsername.value &&
@@ -188,60 +220,25 @@ btnAuth.addEventListener('click', () => {
 
   const person = persons[personIndex];
 
-  // Implement Data
-  const personMovements = person.movements;
-  const personMovementsDates = person.movementsDates;
-
-  for (let i = 0; i < personMovements.length; i++) {
-    const transferWrap = document.createElement('a');
-    transferWrap.classList.add('transfer', 'link_reset');
-    transferWrap.href = '';
-
-    const transferValueWrap = document.createElement('div');
-    transferValueWrap.classList.add('transfer__value__wrap');
-
-    const transferCircle = document.createElement('div');
-    transferCircle.classList.add('transfer__circle');
-
-    const transferValue = document.createElement('div');
-    transferValue.classList.add('transfer__value');
-
-    const transferPerson = document.createElement('div');
-    transferPerson.classList.add('transfer__person');
-
-    const transferDateWrap = document.createElement('div');
-    transferDateWrap.classList.add('transfer__date');
-
-    const transferDate = document.createElement('div');
-
-    const transferDateHours = document.createElement('div');
-    transferDateHours.classList.add('transfer__date__hours');
-
-    const currentMovement = personMovements[i];
-    const currentMovementDate = toIntlDate(personMovementsDates[i], person.region).split(', ');
-    const currentMovementPerson = person.movementsPerson[i];
-
-    transferCircle.classList.add(currentMovement >= 0 ? 'transfer__in' : 'transfer__out');
-
-    transferValue.textContent = toIntlCurrency(currentMovement, person.region, person.currency);
-    transferPerson.textContent = getShortName(currentMovementPerson);
-    transferDate.textContent = currentMovementDate[0];
-    transferDateHours.textContent = currentMovementDate[1];
-
-    transferWrap.appendChild(transferValueWrap);
-    transferValueWrap.appendChild(transferCircle);
-    transferValueWrap.appendChild(transferValue);
-    transferWrap.appendChild(transferPerson);
-    transferWrap.appendChild(transferDateWrap);
-    transferDateWrap.appendChild(transferDate);
-    transferDateWrap.appendChild(transferDateHours);
-
-    transferList.appendChild(transferWrap);
+  // Adding Every Transfer from User Data
+  for (let i = 0; i < person.movements.length; i++) {
+    addTransfer(
+      person.movements[i],
+      person.movementsDates[i],
+      person.movementsPerson[i],
+      person.region,
+      person.currency
+    );
   }
+
   localStorage.setItem('transferList', transferList.innerHTML);
 
   infoName.textContent = getShortName(person.fullName) + '.';
-  infoValue.textContent = toIntlCurrency(person.initialBalance, person.region, person.currency);
+  infoValue.textContent = toIntlCurrency(
+    person.getCurrentBalance(),
+    person.region,
+    person.currency
+  );
   localStorage.setItem('personIndex', personIndex);
 
   manageAnimation(nav, 'nav_ani', 'nav_ani_reverse');
@@ -258,64 +255,19 @@ btnAuth.addEventListener('click', () => {
 
 btnTransfer.addEventListener('click', () => {
   const localPerson = persons[personIndex];
-  console.log(localPerson);
 
-  localPerson.movements.push(Number(inputTransferValue.value));
+  localPerson.movements.push(Number(inputTransferValue.value) * -1);
   localPerson.movementsPerson.push(inputTransferWhom.value);
   localPerson.movementsDates.push(new Date());
 
   // Delete if you want
-  const transferWrap = document.createElement('a');
-  transferWrap.classList.add('transfer', 'link_reset');
-  transferWrap.href = '';
-
-  const transferValueWrap = document.createElement('div');
-  transferValueWrap.classList.add('transfer__value__wrap');
-
-  const transferCircle = document.createElement('div');
-  transferCircle.classList.add('transfer__circle');
-
-  const transferValue = document.createElement('div');
-  transferValue.classList.add('transfer__value');
-
-  const transferPerson = document.createElement('div');
-  transferPerson.classList.add('transfer__person');
-
-  const transferDateWrap = document.createElement('div');
-  transferDateWrap.classList.add('transfer__date');
-
-  const transferDate = document.createElement('div');
-
-  const transferDateHours = document.createElement('div');
-  transferDateHours.classList.add('transfer__date__hours');
-
-  const currentMovement = localPerson.movements[localPerson.movements.length - 1];
-  const currentMovementDate = toIntlDate(
-    localPerson.movementsDates[localPerson.movementsDates.length - 1],
-    localPerson.region
-  ).split(', ');
-  const currentMovementPerson = localPerson.movementsPerson[localPerson.movementsPerson.length - 1];
-
-  transferCircle.classList.add(currentMovement >= 0 ? 'transfer__in' : 'transfer__out');
-
-  transferValue.textContent = toIntlCurrency(
-    currentMovement,
+  addTransfer(
+    localPerson.movements.at(-1),
+    localPerson.movementsDates.at(-1),
+    localPerson.movementsPerson.at(-1),
     localPerson.region,
     localPerson.currency
   );
-  transferPerson.textContent = getShortName(currentMovementPerson);
-  transferDate.textContent = currentMovementDate[0];
-  transferDateHours.textContent = currentMovementDate[1];
-
-  transferWrap.appendChild(transferValueWrap);
-  transferValueWrap.appendChild(transferCircle);
-  transferValueWrap.appendChild(transferValue);
-  transferWrap.appendChild(transferPerson);
-  transferWrap.appendChild(transferDateWrap);
-  transferDateWrap.appendChild(transferDate);
-  transferDateWrap.appendChild(transferDateHours);
-
-  transferList.appendChild(transferWrap);
 });
 
 btnLogOut.addEventListener('click', () => {
