@@ -79,33 +79,46 @@ Internet Bank is a platform for exchanging any digital and paper currency. Pay 0
                   class="input__transfer"
                   type="text"
                   placeholder="How much"
+                  pattern="^\d+(\.\d{1,2})?$"
+                  required
                 />
                 <input
                   id="-transfer__whom"
                   class="input__transfer"
                   type="text"
                   placeholder="Whom"
+                  pattern="\D+"
+                  required
                 />
                 <button
                   id="-btn__transfer"
                   class="btn__default btn_reset btn__action"
                   type="button"
                 >
-                  send
+                  Send
                 </button>
               </div>
             </div>
             <div class="panel__section__mini actions__section actions__loan">
               <h2>Borrow</h2>
               <div class="actions__wrap">
-                <input class="input__transfer" type="text" placeholder="How much" />
-                <button class="btn__default btn_reset btn__action" type="button">Confirm</button>
+                <input
+                  id="-borrow__value"
+                  class="input__transfer"
+                  type="text"
+                  placeholder="How much"
+                  pattern="^\d+(\.\d{1,2})?$"
+                  required
+                />
+                <button id="-btn__borrow" class="btn__default btn_reset btn__action" type="button">
+                  Confirm
+                </button>
               </div>
             </div>
             <div class="panel__section__mini actions__section actions__deposit">
               <h2>Invest</h2>
               <div class="actions__wrap">
-                <input class="input__transfer" type="text" placeholder="How much" />
+                <input class="input__transfer" type="text" placeholder="How much" required />
                 <button class="btn__default btn_reset btn__action" type="button">Confirm</button>
               </div>
             </div>
@@ -118,14 +131,3 @@ Internet Bank is a platform for exchanging any digital and paper currency. Pay 0
     </div>
   </body>
 </html>
-<!-- <a class="transfer link_reset" href="">
-                <div class="transfer__value__wrap">
-                  <div class="transfer__out transfer__circle"></div>
-                  <div class="transfer__value">-11$</div>
-                </div>
-                <div class="transfer__person">John K.</div>
-                <div class="transfer__date">
-                  <div>11.12.2024</div>
-                  <div class="transfer__date__hours">06:01 PM</div>
-                </div>
-              </a> -->

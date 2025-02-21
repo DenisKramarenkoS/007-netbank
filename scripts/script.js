@@ -10,6 +10,9 @@ function getInitials(fullName) {
 
 function getShortName(name) {
   const splittedName = name.split(' ');
+  if (splittedName.length === 1) {
+    return name;
+  }
   splittedName[splittedName.length - 1] = splittedName.at(-1)[0];
   return splittedName.join(' ');
 }
@@ -82,6 +85,42 @@ function addTransfer(movement, movementDate, movementPerson, region, currency) {
   transferList.appendChild(transferWrap);
 }
 
+/**
+ * @param  {...any} args
+ * @returns true if invalid, false if valid
+ */
+function checkInputValidity(...args) {
+  const arr = [...args];
+
+  if (arr.map((item) => item.checkValidity()).includes(false)) {
+    // Play Animation
+    for (const element of arr) {
+      element.classList.add('nav__input_ani-color');
+
+      element.addEventListener(
+        'animationend',
+        () => {
+          element.classList.remove('nav__input_ani-color');
+        },
+        { once: true }
+      );
+    }
+    return true;
+  }
+}
+
+function refreshBalance(localPersonObj) {
+  infoValue.textContent = toIntlCurrency(
+    localPersonObj.getCurrentBalance(),
+    localPersonObj.region,
+    localPersonObj.currency
+  );
+}
+
+function refreshName(localPersonObj) {
+  infoName.textContent = getShortName(localPersonObj.fullName) + '.';
+}
+
 // ---- Variables ----
 
 function Person(
@@ -143,7 +182,7 @@ const persons = [
   ),
 ];
 
-let localTransferList = localStorage.getItem('transferList');
+const localTransferList = localStorage.getItem('transferList');
 
 let personIndex = -1;
 
@@ -153,6 +192,7 @@ const btnAuth = document.getElementById('-btn__auth');
 const btnLogOut = document.getElementById('-btn__log-out');
 const btnSort = document.getElementById('-btn__sort');
 const btnTransfer = document.getElementById('-btn__transfer');
+const btnBorrow = document.getElementById('-btn__borrow');
 
 const inputUsername = document.getElementById('-login__username');
 const inputPassword = document.getElementById('-login__password');
@@ -163,6 +203,7 @@ const transferList = document.getElementById('-transfer__list');
 const inputNav = document.getElementsByClassName('nav__input');
 const inputTransferValue = document.getElementById('-transfer__value');
 const inputTransferWhom = document.getElementById('-transfer__whom');
+const inputBorrowValue = document.getElementById('-borrow__value');
 
 const infoName = document.getElementById('-info__name');
 const infoValue = document.getElementById('-info__value');
@@ -175,28 +216,14 @@ if (Boolean(localTransferList)) {
 
   personIndex = localStorage.getItem('personIndex');
   const localPerson = persons[personIndex];
-  transferList.innerHTML = localStorage.getItem('transferList');
-  infoName.textContent = localPerson.fullName + '.';
-  infoValue.textContent = toIntlCurrency(
-    localPerson.getCurrentBalance(),
-    localPerson.region,
-    localPerson.currency
-  );
+  transferList.innerHTML = localTransferList;
+
+  refreshName(localPerson);
+  refreshBalance(localPerson);
 }
 
 btnAuth.addEventListener('click', () => {
-  if (!inputUsername.checkValidity() || !inputPassword.checkValidity()) {
-    for (const element of inputNav) {
-      element.classList.add('nav__input_ani-color');
-
-      element.addEventListener(
-        'animationend',
-        () => {
-          element.classList.remove('nav__input_ani-color');
-        },
-        { once: true }
-      );
-    }
+  if (checkInputValidity(inputUsername, inputPassword)) {
     return;
   }
   // Find Person Index in order to get access to person
@@ -210,27 +237,24 @@ btnAuth.addEventListener('click', () => {
     return;
   }
 
-  const person = persons[personIndex];
+  const localPerson = persons[personIndex];
 
   // Adding Every Transfer from User Data
-  for (let i = 0; i < person.movements.length; i++) {
+  for (let i = 0; i < localPerson.movements.length; i++) {
     addTransfer(
-      person.movements[i],
-      person.movementsDates[i],
-      person.movementsPerson[i],
-      person.region,
-      person.currency
+      localPerson.movements[i],
+      localPerson.movementsDates[i],
+      localPerson.movementsPerson[i],
+      localPerson.region,
+      localPerson.currency
     );
   }
 
   localStorage.setItem('transferList', transferList.innerHTML);
 
-  infoName.textContent = getShortName(person.fullName) + '.';
-  infoValue.textContent = toIntlCurrency(
-    person.getCurrentBalance(),
-    person.region,
-    person.currency
-  );
+  refreshName(localPerson);
+  refreshBalance(localPerson);
+
   localStorage.setItem('personIndex', personIndex);
 
   manageAnimation(nav, 'nav_ani', 'nav_ani_reverse');
@@ -246,13 +270,15 @@ btnAuth.addEventListener('click', () => {
 });
 
 btnTransfer.addEventListener('click', () => {
+  if (checkInputValidity(inputTransferValue, inputTransferWhom)) {
+    return;
+  }
   const localPerson = persons[personIndex];
 
   localPerson.movements.push(Number(inputTransferValue.value) * -1);
   localPerson.movementsPerson.push(inputTransferWhom.value);
   localPerson.movementsDates.push(new Date());
 
-  // Delete if you want
   addTransfer(
     localPerson.movements.at(-1),
     localPerson.movementsDates.at(-1),
@@ -261,12 +287,7 @@ btnTransfer.addEventListener('click', () => {
     localPerson.currency
   );
 
-  // Refresh Balance
-  infoValue.textContent = toIntlCurrency(
-    localPerson.getCurrentBalance(),
-    localPerson.region,
-    localPerson.currency
-  );
+  refreshBalance(localPerson);
 });
 
 btnLogOut.addEventListener('click', () => {
@@ -282,4 +303,26 @@ btnLogOut.addEventListener('click', () => {
   );
   nav.classList.remove('hidden');
   manageAnimation(nav, 'nav_ani_reverse', 'nav_ani');
+});
+
+btnBorrow.addEventListener('click', () => {
+  if (checkInputValidity(inputBorrowValue)) {
+    return;
+  }
+
+  const localPerson = persons[personIndex];
+
+  localPerson.movements.push(Number(inputBorrowValue.value));
+  localPerson.movementsPerson.push('Borrow');
+  localPerson.movementsDates.push(new Date());
+
+  addTransfer(
+    localPerson.movements.at(-1),
+    localPerson.movementsDates.at(-1),
+    localPerson.movementsPerson.at(-1),
+    localPerson.region,
+    localPerson.currency
+  );
+
+  refreshBalance(localPerson);
 });
