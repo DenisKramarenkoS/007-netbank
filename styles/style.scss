@@ -12,6 +12,7 @@ $clr-primary-a20: #a960e3;
 $clr-primary-a30: #b777e7;
 $clr-primary-a40: #c58eec;
 $clr-primary-a50: #d1a4f0;
+$clr-primary-dim: hsl(276, 12%, 53%);
 
 $clr-text: #dfc7f0;
 $clr-rose: rgb(255, 0, 85);
@@ -182,6 +183,22 @@ h2 {
   }
 }
 
+.btn__selective {
+  padding-inline: 20px;
+  padding-block: 3px;
+  background-color: transparent;
+  color: $clr-primary-dim;
+  border: 2px solid $clr-primary-dim;
+  border-radius: 25px;
+  font-size: 1.2rem;
+  transition: color 0.2s, border-color 0.2s;
+
+  &:hover {
+    color: $clr-text;
+    border-color: $clr-primary-a50;
+  }
+}
+
 .btn__action {
   width: 50%;
   margin-inline: auto;
@@ -248,7 +265,7 @@ h2 {
   font-size: 20px;
   overflow-y: auto;
   height: 100%;
-  scrollbar-width: none
+  scrollbar-width: none;
 }
 
 .transfer__circle {
@@ -362,6 +379,13 @@ h2 {
   color: $clr-text;
   width: 100%;
   font-family: 'sf';
+}
+
+// invest
+.invest__btns {
+  width: 100%;
+  display: flex;
+  gap: 5px;
 }
 
 .link_reset {

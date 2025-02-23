@@ -151,6 +151,21 @@ h2 {
   background-color: rgb(255, 0, 85);
 }
 
+.btn__selective {
+  padding-inline: 20px;
+  padding-block: 3px;
+  background-color: transparent;
+  color: hsl(276, 12%, 53%);
+  border: 2px solid hsl(276, 12%, 53%);
+  border-radius: 25px;
+  font-size: 1.2rem;
+  transition: color 0.2s, border-color 0.2s;
+}
+.btn__selective:hover {
+  color: #dfc7f0;
+  border-color: #d1a4f0;
+}
+
 .btn__action {
   width: 50%;
   margin-inline: auto;
@@ -324,6 +339,12 @@ h2 {
   color: #dfc7f0;
   width: 100%;
   font-family: "sf";
+}
+
+.invest__btns {
+  width: 100%;
+  display: flex;
+  gap: 5px;
 }
 
 .link_reset {
