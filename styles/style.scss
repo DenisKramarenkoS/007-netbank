@@ -199,6 +199,11 @@ h2 {
   }
 }
 
+.btn__selective_active {
+  border: 2px solid $clr-primary-a50;
+  color: $clr-text;
+}
+
 .btn__action {
   width: 50%;
   margin-inline: auto;
@@ -322,6 +327,32 @@ h2 {
   &:hover {
     height: 70px;
   }
+}
+
+.transfer_percent {
+  border: 2px solid $clr-primary-a50;
+  border-radius: 25px;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 5px;
+  padding-inline: 20px;
+  padding-bottom: 5px;
+  transition: height 0.2s;
+  margin-bottom: 10px;
+
+  &:hover {
+    height: 90px;
+  }
+}
+
+.transfer__info-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
 // actions
