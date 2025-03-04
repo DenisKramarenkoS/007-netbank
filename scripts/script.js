@@ -40,7 +40,23 @@ function manageAnimation(element, oldAnimationClass, newAnimationClass) {
   element.classList.add(newAnimationClass);
 }
 
-function addTransfer(movement, movementDate, movementPerson, region, currency) {
+function getRandomFromRange(a, b) {
+  return parseFloat((Math.random() * (b - a) + a).toFixed(2));
+}
+function addTransfer(movement, movementDate, movementPerson, investType, region, currency) {
+  if (movementPerson === 'invest') {
+    addPercent(
+      {
+        movements: [movement],
+        movementsDates: [movementDate],
+        region: region,
+        currency: currency,
+      },
+      investType
+    );
+    return;
+  }
+
   const transferWrap = document.createElement('a');
   transferWrap.classList.add('transfer', 'link_reset');
   transferWrap.href = '';
@@ -85,13 +101,13 @@ function addTransfer(movement, movementDate, movementPerson, region, currency) {
   transferList.appendChild(transferWrap);
 }
 
-function addTransferPercentage(movement, movementDate, movementPerson, region, currency) {
-  const transferWrap = document.createElement('a');
+function addPercent({ movements, movementsDates, region, currency }, investTypeStr) {
+  const transferWrap = document.createElement('div');
   transferWrap.classList.add('transfer_percent', 'link_reset');
   transferWrap.href = '';
 
-  const transferInfoContainer = document.createElement('div');
-  transferInfoContainer.classList.add('transfer__info-container');
+  const transferInfoWrap = document.createElement('div');
+  transferInfoWrap.classList.add('transfer__info-container');
 
   const transferValue = document.createElement('div');
   transferValue.classList.add('transfer__value');
@@ -107,15 +123,25 @@ function addTransferPercentage(movement, movementDate, movementPerson, region, c
   const transferDateHours = document.createElement('div');
   transferDateHours.classList.add('transfer__date__hours');
 
-  const intlMovementDate = toIntlDate(movementDate, region).split(', ');
-
   const btnGet = document.createElement('button');
-  btnGet.classList.add('btn__default', 'btn_reset', 'btn__action');
+  btnGet.classList.add('btn__default', 'btn_reset', 'btn__action', 'btn__get-invest');
+  btnGet.textContent = 'Get';
+  btnGet.type = 'button';
 
-  transferValue.textContent = toIntlCurrency(movement, region, currency);
+  const intlMovementDate = toIntlDate(movementsDates.at(-1), region).split(', ');
 
+  transferValue.textContent = toIntlCurrency(movements.at(-1) * -1, region, currency);
+  transferPercentage.textContent = investTypeStr; // Do Do Do Do
   transferDate.textContent = intlMovementDate[0];
   transferDateHours.textContent = intlMovementDate[1];
+
+  transferWrap.appendChild(transferInfoWrap);
+  transferWrap.appendChild(btnGet);
+  transferInfoWrap.appendChild(transferValue);
+  transferInfoWrap.appendChild(transferPercentage);
+  transferInfoWrap.appendChild(transferDateWrap);
+  transferDateWrap.appendChild(transferDate);
+  transferDateWrap.appendChild(transferDateHours);
 
   transferList.appendChild(transferWrap);
 }
@@ -166,6 +192,7 @@ function Person(
   movements,
   movementsDates,
   movementsPerson,
+  typeOfInvest,
   region,
   currency
 ) {
@@ -176,6 +203,7 @@ function Person(
   this.movements = movements;
   this.movementsDates = movementsDates;
   this.movementsPerson = movementsPerson;
+  this.typeOfInvest = typeOfInvest;
   this.region = region;
   this.currency = currency;
 
@@ -190,13 +218,15 @@ const persons = [
     1111,
     180_000,
     4.5,
-    [900, -40, 5000],
+    [900, -40, 5000, -800],
     [
       new Date('2019-01-25T14:18:46.235Z'),
       new Date('2023-02-08T07:25:23.114Z'),
       new Date('2024-10-05T12:29:53.131Z'),
+      new Date('2024-11-05T12:29:53.131Z'),
     ],
-    ['John Karnowel', 'Jane Cloude Damme', 'Laura Poe'],
+    ['John Karnowel', 'Jane Cloude Damme', 'Laura Poe', 'invest'],
+    [null, null, null, 'Perspective'],
     'it',
     'EUR'
   ),
@@ -212,6 +242,7 @@ const persons = [
       new Date('2025-01-04T04:20:53.194Z'),
     ],
     ['Genry Mozaro', 'Jovvani Jarsoni', 'Alexander McQueen'],
+    [null, null, null],
     'en-US',
     'USD'
   ),
@@ -247,7 +278,7 @@ const infoName = document.getElementById('-info__name');
 const infoValue = document.getElementById('-info__value');
 
 const investBtnsOptions = document.getElementById('-invest__btns');
-
+let investBtnCurrentText = '';
 // ---- Code ----
 
 if (Boolean(localTransferList)) {
@@ -285,6 +316,7 @@ btnAuth.addEventListener('click', () => {
       localPerson.movements[i],
       localPerson.movementsDates[i],
       localPerson.movementsPerson[i],
+      localPerson.typeOfInvest[i],
       localPerson.region,
       localPerson.currency
     );
@@ -318,11 +350,13 @@ btnTransfer.addEventListener('click', () => {
   localPerson.movements.push(Number(inputTransferValue.value) * -1);
   localPerson.movementsPerson.push(inputTransferWhom.value);
   localPerson.movementsDates.push(new Date());
+  localPerson.typeOfInvest.push(null);
 
   addTransfer(
     localPerson.movements.at(-1),
     localPerson.movementsDates.at(-1),
     localPerson.movementsPerson.at(-1),
+    null,
     localPerson.region,
     localPerson.currency
   );
@@ -373,6 +407,7 @@ investBtnsOptions.addEventListener('click', (event) => {
       btnsSelective[i].classList.remove('btn__selective_active');
     }
     event.target.classList.add('btn__selective_active');
+    investBtnCurrentText = event.target.textContent;
   }
 });
 
@@ -380,57 +415,33 @@ btnInvest.addEventListener('click', () => {
   if (checkInputValidity(inputInvest)) {
     return;
   }
-
   const localPerson = persons[personIndex];
 
   localPerson.movements.push(inputInvest.value * -1);
+  localPerson.movementsDates.push(new Date());
+  localPerson.movementsPerson.push('invest');
 
-  const transferWrap = document.createElement('div');
-  transferWrap.classList.add('transfer_percent', 'link_reset');
-  transferWrap.href = '';
-
-  const transferInfoWrap = document.createElement('div');
-  transferInfoWrap.classList.add('transfer__info-container');
-
-  const transferValue = document.createElement('div');
-  transferValue.classList.add('transfer__value');
-
-  const transferPercentage = document.createElement('div');
-  transferPercentage.classList.add('transfer__percentage');
-
-  const transferDateWrap = document.createElement('div');
-  transferDateWrap.classList.add('transfer__date');
-
-  const transferDate = document.createElement('div');
-
-  const transferDateHours = document.createElement('div');
-  transferDateHours.classList.add('transfer__date__hours');
-
-  const btnGet = document.createElement('button');
-  btnGet.classList.add('btn__default', 'btn_reset', 'btn__action');
-  btnGet.textContent = 'Get';
-  btnGet.type = 'button';
-
-  const intlMovementDate = toIntlDate(new Date(), localPerson.region).split(', ');
-
-  transferValue.textContent = toIntlCurrency(
-    localPerson.movements.at(-1) * -1,
-    localPerson.region,
-    localPerson.currency
-  );
-  transferPercentage.textContent = 'Perspective'; // Do Do Do Do
-  transferDate.textContent = intlMovementDate[0];
-  transferDateHours.textContent = intlMovementDate[1];
-
-  transferWrap.appendChild(transferInfoWrap);
-  transferWrap.appendChild(btnGet);
-  transferInfoWrap.appendChild(transferValue);
-  transferInfoWrap.appendChild(transferPercentage);
-  transferInfoWrap.appendChild(transferDateWrap);
-  transferDateWrap.appendChild(transferDate);
-  transferDateWrap.appendChild(transferDateHours);
-
-  transferList.appendChild(transferWrap);
+  addPercent(localPerson, investBtnCurrentText);
+  localStorage.setItem('transferList', transferList.innerHTML);
 
   refreshBalance(localPerson);
+});
+
+transferList.addEventListener('click', (event) => {
+  if (event.target.classList.contains('btn__get-invest')) {
+    const outerElement = event.target.parentElement;
+
+    const investValue = Number(
+      outerElement.getElementsByClassName('transfer__value')[0].textContent.slice(1)
+    );
+    const investMode = outerElement.getElementsByClassName('transfer__percentage')[0].textContent;
+
+    const percent =
+      investMode === 'Not risky'
+        ? getRandomFromRange(0.98, 1.05)
+        : investMode === 'Perspective'
+        ? getRandomFromRange(0.9, 1.2)
+        : getRandomFromRange(0.55, 1.7);
+    console.log(percent);
+  }
 });
