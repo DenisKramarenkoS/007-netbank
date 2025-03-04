@@ -118,13 +118,22 @@ Internet Bank is a platform for exchanging any digital and paper currency. Pay 0
             <div class="panel__section__mini actions__section actions__deposit">
               <h2>Invest</h2>
               <div class="actions__wrap">
-                <input class="input__transfer" type="text" placeholder="How much" required />
-                <div class="invest__btns">
+                <input
+                  id="-input__invest"
+                  class="input__transfer"
+                  type="text"
+                  placeholder="How much"
+                  pattern="^\d+(\.\d{1,2})?$"
+                  required
+                />
+                <div id="-invest__btns" class="invest__btns">
                   <button class="btn_reset btn__selective" type="button">Not risky</button>
                   <button class="btn_reset btn__selective" type="button">Perspective</button>
                   <button class="btn_reset btn__selective" type="button">Risky</button>
                 </div>
-                <button class="btn__default btn_reset btn__action" type="button">Confirm</button>
+                <button id="-btn__invest" class="btn__default btn_reset btn__action" type="button">
+                  Confirm
+                </button>
               </div>
             </div>
           </section>
@@ -132,7 +141,19 @@ Internet Bank is a platform for exchanging any digital and paper currency. Pay 0
         <div class="extra">
           <button id="-btn__log-out" class="btn__default btn_reset" type="button">Log Out</button>
         </div>
+        <!-- Remove this data -->
       </main>
     </div>
   </body>
 </html>
+<!-- <a class="transfer_percent link_reset" href="">
+          <div class="transfer__info-container">
+            <div class="transfer__value">5.000,00&nbsp;€</div>
+            <div class="transfer__percentage">Perspective</div>
+            <div class="transfer__date">
+              <div>05/10/2024</div>
+              <div class="transfer__date__hours">22:29</div>
+            </div>
+          </div>
+          <button class="btn__default btn_reset btn__action">Get</button>
+        </a> -->
